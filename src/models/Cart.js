@@ -34,6 +34,7 @@ const Cart = {
         ci.id as cart_item_id,
         ci.quantity,
         p.id as product_id,
+        p.vendor_id,
         p.name,
         p.sale_price,
         p.mrp,

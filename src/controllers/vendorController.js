@@ -14,11 +14,11 @@ exports.getDashboard = async (req, res) => {
 
     // Fetch all data in parallel for efficiency
     const [
-      totalEarnings,
+      netEarnings,
       vendorOrders,
       vendorProducts
     ] = await Promise.all([
-      Order.calculateVendorEarnings(vendorId),
+      Vendor.calculateEarnings(vendorId),
       Order.findOrdersByVendorId(vendorId),
       Product.findByVendorId(vendorId)
     ]);
@@ -29,7 +29,7 @@ exports.getDashboard = async (req, res) => {
     res.render('vendor/dashboard', {
       title: 'Dashboard',
       vendor: req.vendor,
-      totalEarnings: totalEarnings,
+      totalEarnings: netEarnings,
       totalOrders: totalOrders,
       activeProducts: activeProducts
     });

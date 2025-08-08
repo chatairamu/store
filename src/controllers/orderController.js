@@ -3,6 +3,7 @@
 
 const Order = require('../models/Order');
 const Cart = require('../models/Cart'); // Needed to get cart contents for order creation
+const Vendor = require('../models/Vendor');
 
 /**
  * Create a new order from the user's cart.
@@ -50,8 +51,12 @@ exports.createOrder = async (req, res) => {
             packaging_charge += product.packaging_charge_override || 0;
         }
     }
-    // If no overrides, you could fall back to a default vendor charge here.
-    // For now, if no overrides, charges will be 0.
+
+    // If no per-product overrides were found, fall back to the vendor's flat rate
+    if (delivery_charge === 0) {
+        const vendor = await Vendor.findById(vendor_id);
+        delivery_charge = vendor.delivery_charge_flat || 0;
+    }
 
     const order_total = grandTotal + delivery_charge + packaging_charge;
 

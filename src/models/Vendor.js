@@ -50,7 +50,7 @@ const Vendor = {
    */
   async findById(id) {
     // Exclude password from the result for security
-    const sql = 'SELECT id, name, owner_name, email, phone, address, city, state, pincode, status, created_at FROM vendors WHERE id = ?';
+    const sql = 'SELECT id, name, owner_name, email, phone, address, city, state, pincode, status, min_cart_value, created_at FROM vendors WHERE id = ?';
     const [rows] = await pool.execute(sql, [id]);
     return rows[0] || null;
   },
@@ -92,6 +92,31 @@ const Vendor = {
     const sql = 'UPDATE vendors SET status = ? WHERE id = ?';
     const [result] = await pool.execute(sql, [newStatus, vendorId]);
     return result;
+  }
+};
+
+  /**
+   * Calculates the net earnings for a vendor after commission.
+   * @param {number} vendorId - The ID of the vendor.
+   * @returns {Promise<number>} The net earnings.
+   */
+  async calculateEarnings(vendorId) {
+    const [vendorRows] = await pool.execute('SELECT commission_rate FROM vendors WHERE id = ?', [vendorId]);
+    if (vendorRows.length === 0) return 0;
+    const commissionRate = vendorRows[0].commission_rate;
+
+    const sql = `
+        SELECT SUM(o.order_total) as grossEarnings
+        FROM orders o
+        WHERE o.vendor_id = ? AND o.order_status = 'Delivered'
+    `;
+    const [result] = await pool.execute(sql, [vendorId]);
+    const grossEarnings = result[0].grossEarnings || 0;
+
+    const commissionAmount = grossEarnings * (commissionRate / 100);
+    const netEarnings = grossEarnings - commissionAmount;
+
+    return parseFloat(netEarnings.toFixed(2));
   }
 };
 

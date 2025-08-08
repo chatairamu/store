@@ -60,6 +60,9 @@ app.use('/api/payments', paymentRoutes);
 const deliveryApiRoutes = require('./src/routes/deliveryApiRoutes');
 app.use('/api/delivery', deliveryApiRoutes);
 
+const publicVendorRoutes = require('./src/routes/publicVendorRoutes');
+app.use('/api/public/vendors', publicVendorRoutes);
+
 // View & Page Routes
 const vendorRoutes = require('./src/routes/vendorRoutes');
 const deliveryPartnerRoutes = require('./src/routes/deliveryPartnerRoutes');

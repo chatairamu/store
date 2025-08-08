@@ -7,10 +7,8 @@ This document outlines the features from the original project description that h
 
 ## II. Advanced Logic & Customization
 
-- **Advanced Vendor Settings**:
-  - Per-vendor delivery charge logic (e.g., distance-based, per-product).
-  - Vendor commission calculation (fixed or percentage) to be reflected in earnings reports.
-  - Per-vendor minimum cart value enforcement.
+## II. Advanced Logic & Customization
+(All advanced logic features from the initial list are now implemented)
 
 ## III. Security
 

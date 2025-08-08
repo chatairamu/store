@@ -134,6 +134,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Initial fetch of the cart
-    fetchCart();
+    const checkMinimumCartValue = async () => {
+        if (!cartData.items || cartData.items.length === 0) return;
+
+        // This assumes a single vendor per cart. A real multi-vendor cart would group items.
+        const vendorId = cartData.items[0].vendor_id; // Need to make sure vendor_id is in cart items.
+        if (!vendorId) return;
+
+        try {
+            const res = await fetch(`/api/public/vendors/${vendorId}/settings`);
+            const settings = await res.json();
+
+            if (settings.min_cart_value > 0 && cartData.totals.subtotal < settings.min_cart_value) {
+                paymentMessageDiv.innerHTML = `This vendor requires a minimum order of ₹${settings.min_cart_value.toFixed(2)}.`;
+                paymentMessageDiv.className = 'alert alert-warning';
+                payButton.disabled = true;
+            }
+        } catch (error) {
+            console.error('Could not fetch vendor settings.');
+        }
+    };
+
+    // Chain the checks
+    fetchCart().then(checkMinimumCartValue);
 });
