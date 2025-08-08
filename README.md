@@ -115,3 +115,50 @@ The application provides a RESTful API for its core functionalities.
   - `POST /apply`
 
 Protected routes require a valid JWT to be sent in the `Authorization` header as a Bearer token.
+
+---
+
+## Deployment to Node.js Hosting (cPanel)
+
+Deploying a Node.js application to a shared hosting environment with cPanel typically involves using the "Setup Node.js App" feature. Here are the general steps:
+
+### 1. Upload Your Project Files
+
+-   Upload all project files (except `node_modules` and `.env`) to a directory in your hosting account (e.g., `/home/your_user/your_app`). You can do this via cPanel's File Manager or FTP.
+
+### 2. Set Up the Node.js Application in cPanel
+
+-   Log in to your cPanel and find the **"Setup Node.js App"** tool.
+-   Click **"Create Application"**.
+-   **Application root**: Set this to the directory where you uploaded your files (e.g., `your_app`).
+-   **Application URL**: Choose the domain or subdomain you want to use for your application. This is where your website will be accessible.
+-   **Application startup file**: Enter `app.js`.
+-   Click **"Create"**.
+
+### 3. Install Dependencies and Configure
+
+-   Once the application is created, the cPanel interface will show you details about it.
+-   You should see a command to enter the virtual environment for your application. It will look something like: `source /home/your_user/nodevenv/your_app/16/bin/activate; cd /home/your_user/your_app`
+-   Open the **"Terminal"** in cPanel, paste this command, and press Enter.
+-   Now, install the dependencies by running: `npm install --production`. The `--production` flag ensures only production dependencies are installed.
+
+### 4. Set Up Environment Variables
+
+-   In the "Setup Node.js App" interface, scroll down to the **"Environment Variables"** section.
+-   Click **"Add Variable"** and add all the necessary variables from your `.env.example` file, one by one.
+    -   `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` (with your production database credentials).
+    -   `JWT_SECRET` (use a new, strong secret for production).
+    -   `WEBSITE_URL`: Set this to the full Application URL you chose in step 2 (e.g., `https://yourdomain.com`).
+-   Save your changes.
+
+### 5. Set Up the Production Database
+
+-   Use the **"MySQL Databases"** and **"phpMyAdmin"** tools in cPanel to create your production database and import the `database.sql` schema, just as you did for your local setup.
+-   Ensure the database credentials you use here match the ones you set in the environment variables.
+
+### 6. Start the Application
+
+-   Go back to the "Setup Node.js App" page.
+-   Click the **"Restart"** button to stop and start your application. It will now be running with your production configuration.
+
+Your application should now be live at the URL you configured.
