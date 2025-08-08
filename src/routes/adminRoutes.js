@@ -55,5 +55,15 @@ router.get('/settings/festivals', adminController.getFestivalSurchargesPage);
 // @access  Admin
 router.post('/settings/festivals', adminController.addFestivalSurcharge);
 
+// @route   GET /admin/reviews
+// @desc    Get the review moderation page
+// @access  Admin
+router.get('/reviews', adminController.getReviewsPage);
+
+// @route   POST /admin/reviews/:reviewId/status
+// @desc    Update a review's status
+// @access  Admin
+router.post('/reviews/:reviewId/status', adminController.updateReviewStatus);
+
 
 module.exports = router;

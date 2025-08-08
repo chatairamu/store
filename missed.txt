@@ -4,10 +4,6 @@ This document outlines the features from the original project description that h
 
 ## I. Core Systems
 
-- **Reviews and Ratings System**:
-  - UI and API for customers to leave reviews/ratings on products and vendors.
-  - A moderation system for admins to approve/reject reviews.
-
 - **Wishlist Functionality**:
   - UI and API for users to add/remove products from their personal wishlist.
 

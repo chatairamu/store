@@ -1,0 +1,47 @@
+<%- include('partials/header') %>
+<%- include('partials/sidebar') %>
+
+<h1 class="mt-4">Review Moderation</h1>
+<p class="lead">Approve or reject new reviews submitted by users.</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">User</th>
+            <th scope="col">Product</th>
+            <th scope="col">Rating</th>
+            <th scope="col">Comment</th>
+            <th scope="col">Submitted On</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if (reviews.length > 0) { %>
+            <% reviews.forEach(review => { %>
+                <tr>
+                    <th scope="row"><%= review.id %></th>
+                    <td><%= review.user_name %></td>
+                    <td><%= review.product_name || 'N/A' %></td>
+                    <td><%= review.rating %> / 5</td>
+                    <td><%= review.comment %></td>
+                    <td><%= new Date(review.created_at).toLocaleDateString() %></td>
+                    <td>
+                        <form action="/admin/reviews/<%= review.id %>/status" method="POST" class="d-inline">
+                            <button type="submit" name="status" value="approved" class="btn btn-sm btn-success">Approve</button>
+                        </form>
+                        <form action="/admin/reviews/<%= review.id %>/status" method="POST" class="d-inline">
+                            <button type="submit" name="status" value="rejected" class="btn btn-sm btn-danger">Reject</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }); %>
+        <% } else { %>
+            <tr>
+                <td colspan="7" class="text-center">There are no reviews awaiting moderation.</td>
+            </tr>
+        <% } %>
+    </tbody>
+</table>
+
+<%- include('partials/footer') %>

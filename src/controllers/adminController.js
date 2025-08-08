@@ -4,6 +4,7 @@
 const User = require('../models/User');
 const Vendor = require('../models/Vendor');
 const Order = require('../models/Order');
+const Review = require('../models/Review');
 
 /**
  * Renders the main admin dashboard with summary stats.
@@ -31,6 +32,39 @@ exports.getDashboardPage = async (req, res) => {
     console.error('Admin Dashboard Error:', error);
     res.status(500).send('Server Error');
   }
+};
+
+/**
+ * Renders the review moderation page.
+ * @route GET /admin/reviews
+ */
+exports.getReviewsPage = async (req, res) => {
+    try {
+        const reviews = await Review.findAllPending();
+        res.render('admin/reviews', {
+            title: 'Review Moderation',
+            reviews
+        });
+    } catch (error) {
+        console.error('Get Reviews Page Error:', error);
+        res.status(500).send('Server Error');
+    }
+};
+
+/**
+ * Handles updating a review's status (approval/rejection).
+ * @route POST /admin/reviews/:id/status
+ */
+exports.updateReviewStatus = async (req, res) => {
+    try {
+        const { reviewId } = req.params;
+        const { status } = req.body;
+        await Review.updateStatus(reviewId, status);
+        res.redirect('/admin/reviews');
+    } catch (error) {
+        console.error('Update Review Status Error:', error);
+        res.status(500).send('Server Error');
+    }
 };
 
 /**

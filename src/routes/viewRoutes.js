@@ -12,6 +12,9 @@ router.get('/', viewController.getHomePage);
 // Products page
 router.get('/products', viewController.getProductsPage);
 
+// Single Product Detail page
+router.get('/product/:id', viewController.getProductDetailPage);
+
 // Cart page
 router.get('/cart', viewController.getCartPage);
 
