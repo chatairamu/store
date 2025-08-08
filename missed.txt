@@ -12,7 +12,6 @@ This document outlines the features from the original project description that h
   - Per-vendor minimum cart value enforcement.
 
 - **Advanced Product Settings**:
-  - Per-product overrides for delivery and packaging charges.
   - Product tagging system for better filtering and search.
   - Logic for `special_price` and `discount_type` fields.
 

@@ -34,10 +34,25 @@ exports.createOrder = async (req, res) => {
     const [firstItem] = await pool.execute('SELECT vendor_id FROM products WHERE id = ?', [items[0].product_id]);
     const vendor_id = firstItem[0].vendor_id;
 
-    // 2. Calculate accurate totals using the utility
+    const { calculateTotals } = require('../utils/taxCalculator');
+    const Product = require('../models/Product');
+
+    // 2. Calculate accurate totals and charges
     const { subtotal, gstTotal, grandTotal } = await calculateTotals(items);
-    const delivery_charge = 50.00; // This would come from a delivery charge calculator
-    const packaging_charge = items.length * 10.00; // This could be more complex too
+
+    let delivery_charge = 0;
+    let packaging_charge = 0;
+
+    for (const item of items) {
+        const product = await Product.findById(item.product_id);
+        if (product) {
+            delivery_charge += product.delivery_charge_override || 0;
+            packaging_charge += product.packaging_charge_override || 0;
+        }
+    }
+    // If no overrides, you could fall back to a default vendor charge here.
+    // For now, if no overrides, charges will be 0.
+
     const order_total = grandTotal + delivery_charge + packaging_charge;
 
     // 3. Prepare order data
