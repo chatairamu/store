@@ -189,4 +189,24 @@ const Order = {
   }
 };
 
+  /**
+   * Finds all orders assigned to a specific delivery partner.
+   * @param {number} partnerId - The delivery partner's ID.
+   * @returns {Promise<Array>} An array of order objects.
+   */
+  async findOrdersByDeliveryPartnerId(partnerId) {
+    const sql = `
+      SELECT o.*, u.name as user_name, v.name as vendor_name, v.address as vendor_address
+      FROM orders o
+      JOIN order_delivery od ON o.id = od.order_id
+      JOIN users u ON o.user_id = u.id
+      JOIN vendors v ON o.vendor_id = v.id
+      WHERE od.delivery_partner_id = ?
+      ORDER BY o.created_at DESC
+    `;
+    const [rows] = await pool.execute(sql, [partnerId]);
+    return rows;
+  }
+};
+
 module.exports = Order;

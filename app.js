@@ -47,7 +47,9 @@ app.use('/api/coupons', couponRoutes);
 
 // View & Page Routes
 const vendorRoutes = require('./src/routes/vendorRoutes');
+const deliveryPartnerRoutes = require('./src/routes/deliveryPartnerRoutes');
 app.use('/vendor', vendorRoutes);
+app.use('/delivery', deliveryPartnerRoutes);
 app.use('/', viewRoutes); // This should be last as a catch-all for pages
 
 // --- Server Startup ---

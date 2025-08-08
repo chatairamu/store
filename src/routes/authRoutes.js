@@ -29,4 +29,11 @@ router.post('/vendor/register', authController.registerVendor);
 router.post('/vendor/login', authController.loginVendor);
 
 
+// --- Delivery Partner Authentication Routes ---
+// @route   POST /api/auth/delivery-partner/login
+// @desc    Login a delivery partner and get a token
+// @access  Public
+router.post('/delivery-partner/login', authController.loginDeliveryPartner);
+
+
 module.exports = router;

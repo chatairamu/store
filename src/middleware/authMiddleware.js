@@ -24,18 +24,22 @@ const protect = async (req, res, next) => {
       // Verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      // Attach user or vendor to the request object based on token payload
+      // Attach user, vendor, or partner to the request object based on token payload
       if (decoded.userType === 'user') {
         req.user = await User.findById(decoded.id);
       } else if (decoded.userType === 'vendor') {
         req.vendor = await Vendor.findById(decoded.id);
+      } else if (decoded.userType === 'delivery_partner') {
+        // Need to import DeliveryPartner model for this
+        const DeliveryPartner = require('../models/DeliveryPartner');
+        req.partner = await DeliveryPartner.findById(decoded.id);
       } else {
-        // Handle unknown userType if necessary
+        // Handle unknown userType
         return res.status(401).json({ message: 'Not authorized, invalid token payload.' });
       }
 
-      // If user/vendor not found in DB
-      if (!req.user && !req.vendor) {
+      // If user/vendor/partner not found in DB
+      if (!req.user && !req.vendor && !req.partner) {
         return res.status(401).json({ message: 'Not authorized, user not found.' });
       }
 
@@ -79,4 +83,16 @@ const isVendor = (req, res, next) => {
   }
 };
 
-module.exports = { protect, admin, isVendor };
+/**
+ * Middleware to ensure the logged-in user is a delivery partner.
+ * Should be used after the 'protect' middleware.
+ */
+const isDeliveryPartner = (req, res, next) => {
+  if (req.partner) {
+    next();
+  } else {
+    res.status(403).json({ message: 'Access denied. Delivery partner authorization required.' });
+  }
+};
+
+module.exports = { protect, admin, isVendor, isDeliveryPartner };

@@ -3,6 +3,7 @@
 
 const User = require('../models/User');
 const Vendor = require('../models/Vendor');
+const DeliveryPartner = require('../models/DeliveryPartner');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 
@@ -123,4 +124,44 @@ exports.registerVendor = async (req, res) => {
 exports.loginVendor = async (req, res) => {
     // TODO: Implement vendor login logic similar to loginUser
     res.status(501).json({ message: 'Vendor login not implemented yet.' });
+};
+
+// --- Delivery Partner Authentication ---
+
+/**
+ * Login an existing delivery partner.
+ * @route POST /api/auth/delivery-partner/login
+ */
+exports.loginDeliveryPartner = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({ message: 'Please provide both email and password.' });
+        }
+
+        const partner = await DeliveryPartner.findByEmail(email);
+        if (!partner) {
+            return res.status(401).json({ message: 'Invalid credentials.' });
+        }
+
+        const isMatch = await DeliveryPartner.comparePasswords(password, partner.password);
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Invalid credentials.' });
+        }
+
+        const token = generateToken(partner.id, 'delivery_partner');
+        res.status(200).json({
+            message: 'Logged in successfully!',
+            token,
+            partner: {
+                id: partner.id,
+                name: partner.name,
+                email: partner.email,
+            },
+        });
+    } catch (error) {
+        console.error('Delivery Partner Login Error:', error);
+        res.status(500).json({ message: 'Server error during delivery partner login.' });
+    }
 };

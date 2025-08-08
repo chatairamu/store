@@ -1,0 +1,48 @@
+<%- include('partials/header') %>
+<%- include('partials/sidebar') %>
+
+<h1 class="mt-4">Assigned Orders</h1>
+<p class="lead">Here are the orders currently assigned to you.</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Order ID</th>
+            <th scope="col">Customer</th>
+            <th scope="col">Pickup From</th>
+            <th scope="col">Deliver To</th>
+            <th scope="col">Status</th>
+            <th scope="col">Update Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if (orders.length > 0) { %>
+            <% orders.forEach(order => { %>
+                <tr>
+                    <th scope="row">#<%= order.id %></th>
+                    <td><%= order.user_name %></td>
+                    <td><%= order.vendor_name %><br><small><%= order.vendor_address %></small></td>
+                    <td><!-- Customer address would go here --></td>
+                    <td>
+                        <span class="badge bg-primary"><%= order.order_status %></span>
+                    </td>
+                    <td>
+                        <form action="/delivery/orders/<%= order.id %>/status" method="POST" class="d-flex">
+                            <select name="status" class="form-select form-select-sm me-2">
+                                <option value="Out for Delivery" <%= order.order_status === 'Out for Delivery' ? 'selected' : '' %>>Out for Delivery</option>
+                                <option value="Delivered" <%= order.order_status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-success">Update</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }); %>
+        <% } else { %>
+            <tr>
+                <td colspan="6" class="text-center">You have no orders assigned to you at the moment.</td>
+            </tr>
+        <% } %>
+    </tbody>
+</table>
+
+<%- include('partials/footer') %>
