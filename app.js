@@ -44,7 +44,11 @@ app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/coupons', couponRoutes);
-app.use('/', viewRoutes); // This should be after API routes
+
+// View & Page Routes
+const vendorRoutes = require('./src/routes/vendorRoutes');
+app.use('/vendor', vendorRoutes);
+app.use('/', viewRoutes); // This should be last as a catch-all for pages
 
 // --- Server Startup ---
 app.listen(PORT, () => {

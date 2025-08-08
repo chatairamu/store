@@ -65,4 +65,18 @@ const admin = (req, res, next) => {
 };
 
 
-module.exports = { protect, admin };
+/**
+ * Middleware to ensure the logged-in user is a vendor.
+ * Should be used after the 'protect' middleware.
+ */
+const isVendor = (req, res, next) => {
+  if (req.vendor) {
+    next();
+  } else {
+    res.status(403).json({ message: 'Access denied. Vendor authorization required.' });
+    // Or redirect to a login page with an error message
+    // res.redirect('/login?error=vendor_required');
+  }
+};
+
+module.exports = { protect, admin, isVendor };

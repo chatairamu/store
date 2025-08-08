@@ -128,4 +128,65 @@ const Order = {
   }
 };
 
+  /**
+   * Finds all orders containing products from a specific vendor.
+   * @param {number} vendorId - The vendor's ID.
+   * @returns {Promise<Array>} An array of order objects.
+   */
+  async findOrdersByVendorId(vendorId) {
+    const sql = `
+      SELECT DISTINCT o.*, u.name as user_name
+      FROM orders o
+      JOIN order_items oi ON o.id = oi.order_id
+      JOIN products p ON oi.product_id = p.id
+      JOIN users u ON o.user_id = u.id
+      WHERE p.vendor_id = ?
+      ORDER BY o.created_at DESC
+    `;
+    const [rows] = await pool.execute(sql, [vendorId]);
+    return rows;
+  },
+
+  /**
+   * Updates the status of an order.
+   * @param {number} orderId - The ID of the order to update.
+   * @param {string} newStatus - The new status.
+   * @returns {Promise<object>} The result of the update operation.
+   */
+  async updateStatus(orderId, newStatus) {
+    const allowedStatuses = ['Pending', 'Confirmed', 'Cooking', 'Out for Delivery', 'Delivered', 'Cancelled'];
+    if (!allowedStatuses.includes(newStatus)) {
+      throw new Error('Invalid order status.');
+    }
+
+    const sql = 'UPDATE orders SET order_status = ? WHERE id = ?';
+    const [result] = await pool.execute(sql, [newStatus, orderId]);
+    return result;
+  }
+};
+
+  /**
+   * Calculates the total earnings for a vendor from delivered orders.
+   * @param {number} vendorId - The vendor's ID.
+   * @returns {Promise<number>} The total earnings.
+   */
+  async calculateVendorEarnings(vendorId) {
+    // This query sums the total of all 'Delivered' orders for a vendor.
+    // It joins through order_items and products to link orders to the vendor.
+    const sql = `
+      SELECT SUM(o.order_total) as totalEarnings
+      FROM orders o
+      WHERE o.order_status = 'Delivered'
+      AND o.id IN (
+        SELECT DISTINCT oi.order_id
+        FROM order_items oi
+        JOIN products p ON oi.product_id = p.id
+        WHERE p.vendor_id = ?
+      )
+    `;
+    const [result] = await pool.execute(sql, [vendorId]);
+    return result[0].totalEarnings || 0;
+  }
+};
+
 module.exports = Order;

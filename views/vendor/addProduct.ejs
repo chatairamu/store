@@ -1,0 +1,56 @@
+<%- include('partials/header') %>
+<%- include('partials/sidebar') %>
+
+<h1 class="mt-4">Add a New Product</h1>
+<p class="lead">Fill out the form below to add a new product to your store.</p>
+
+<form action="/vendor/products" method="POST">
+    <div class="mb-3">
+        <label for="name" class="form-label">Product Name</label>
+        <input type="text" class="form-control" id="name" name="name" required>
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="mrp" class="form-label">MRP (Maximum Retail Price)</label>
+            <input type="number" class="form-control" id="mrp" name="mrp" step="0.01" required>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="sale_price" class="form-label">Sale Price</label>
+            <input type="number" class="form-control" id="sale_price" name="sale_price" step="0.01" required>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label for="stock" class="form-label">Stock Quantity</label>
+            <input type="number" class="form-control" id="stock" name="stock" value="0" required>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="category_id" class="form-label">Category</label>
+            <select class="form-select" id="category_id" name="category_id" required>
+                <!-- In a real app, these would be populated from the database -->
+                <option value="1">Biryani</option>
+                <option value="2">Appetizers</option>
+                <option value="3">Desserts</option>
+            </select>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="gst_slab_id" class="form-label">GST Slab</label>
+            <select class="form-select" id="gst_slab_id" name="gst_slab_id" required>
+                <!-- In a real app, these would be populated from the database -->
+                <option value="1">No GST (0%)</option>
+                <option value="2" selected>GST 5%</option>
+                <option value="3">GST 12%</option>
+                <option value="4">GST 18%</option>
+                <option value="5">GST 28%</option>
+            </select>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Product</button>
+    <a href="/vendor/products" class="btn btn-secondary">Cancel</a>
+</form>
+
+<%- include('partials/footer') %>

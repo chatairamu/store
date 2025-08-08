@@ -1,0 +1,43 @@
+<%- include('partials/header') %>
+<%- include('partials/sidebar') %>
+
+<h1 class="mt-4">Manage Your Products</h1>
+<p class="lead">Here you can add, edit, and view your products.</p>
+
+<a href="/vendor/products/add" class="btn btn-primary mb-3">Add New Product</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Stock</th>
+            <th scope="col">Status</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if (products.length > 0) { %>
+            <% products.forEach(product => { %>
+                <tr>
+                    <th scope="row"><%= product.id %></th>
+                    <td><%= product.name %></td>
+                    <td>₹<%= product.sale_price.toFixed(2) %></td>
+                    <td><%= product.stock %></td>
+                    <td><span class="badge bg-<%= product.status === 'active' ? 'success' : 'secondary' %>"><%= product.status %></span></td>
+                    <td>
+                        <a href="/vendor/products/edit/<%= product.id %>" class="btn btn-sm btn-secondary">Edit</a>
+                        <button class="btn btn-sm btn-danger delete-product-btn" data-id="<%= product.id %>">Delete</button>
+                    </td>
+                </tr>
+            <% }); %>
+        <% } else { %>
+            <tr>
+                <td colspan="6" class="text-center">You have not added any products yet.</td>
+            </tr>
+        <% } %>
+    </tbody>
+</table>
+
+<%- include('partials/footer') %>

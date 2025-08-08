@@ -82,4 +82,50 @@ const Product = {
   }
 };
 
+  /**
+   * Finds all products belonging to a specific vendor.
+   * @param {number} vendorId - The ID of the vendor.
+   * @returns {Promise<Array>} An array of product objects.
+   */
+  async findByVendorId(vendorId) {
+    const sql = `
+      SELECT p.*, c.name as category_name
+      FROM products p
+      JOIN categories c ON p.category_id = c.id
+      WHERE p.vendor_id = ?
+    `;
+    const [rows] = await pool.execute(sql, [vendorId]);
+    return rows;
+  },
+
+  /**
+   * Updates an existing product.
+   * @param {number} productId - The ID of the product to update.
+   * @param {object} productData - The new data for the product.
+   * @returns {Promise<object>} The result of the update operation.
+   */
+  async update(productId, productData) {
+    // This is a simplified update. A real app might have more complex logic.
+    const { name, description, mrp, sale_price, stock, status } = productData;
+    const sql = `
+      UPDATE products
+      SET name = ?, description = ?, mrp = ?, sale_price = ?, stock = ?, status = ?
+      WHERE id = ?
+    `;
+    const [result] = await pool.execute(sql, [name, description, mrp, sale_price, stock, status, productId]);
+    return result;
+  },
+
+  /**
+   * Deletes a product from the database.
+   * @param {number} productId - The ID of the product to delete.
+   * @returns {Promise<object>} The result of the delete operation.
+   */
+  async delete(productId) {
+    const sql = 'DELETE FROM products WHERE id = ?';
+    const [result] = await pool.execute(sql, [productId]);
+    return result;
+  }
+};
+
 module.exports = Product;
