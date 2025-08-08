@@ -8,6 +8,9 @@ const pool = require('../config/db');
  * @param {Array<object>} items - An array of items, each must have product_id, quantity, and sale_price.
  * @returns {Promise<object>} An object containing subtotal, gstTotal, and grandTotal.
  */
+const { getCurrentPrice } = require('./priceCalculator');
+const Product = require('../models/Product');
+
 async function calculateTotals(items) {
     let subtotal = 0;
     let gstTotal = 0;
@@ -20,14 +23,14 @@ async function calculateTotals(items) {
     const gstSlabCache = new Map();
 
     for (const item of items) {
-        const itemTotal = item.sale_price * item.quantity;
+        const product = await Product.findById(item.product_id);
+        if (!product) continue; // Skip if product not found
+
+        const effectivePrice = getCurrentPrice(product);
+        const itemTotal = effectivePrice * item.quantity;
         subtotal += itemTotal;
 
-        // Fetch product's gst_slab_id
-        const [productRows] = await pool.execute('SELECT gst_slab_id FROM products WHERE id = ?', [item.product_id]);
-        if (productRows.length === 0) continue; // Skip if product not found
-
-        const slabId = productRows[0].gst_slab_id;
+        const slabId = product.gst_slab_id;
         let percentage = 0;
 
         if (gstSlabCache.has(slabId)) {

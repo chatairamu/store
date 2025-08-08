@@ -103,6 +103,8 @@ CREATE TABLE `products` (
   `mrp` decimal(10,2) NOT NULL,
   `sale_price` decimal(10,2) NOT NULL,
   `special_price` decimal(10,2) DEFAULT NULL,
+  `special_price_start` datetime DEFAULT NULL,
+  `special_price_end` datetime DEFAULT NULL,
   `discount_type` enum('percentage','fixed') DEFAULT NULL,
   `sku` varchar(100) DEFAULT NULL,
   `stock` int(11) NOT NULL DEFAULT 0,

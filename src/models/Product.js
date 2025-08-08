@@ -67,17 +67,20 @@ const Product = {
       gst_slab_id,
       stock,
       weight,
-      is_special_product
+      is_special_product,
+      special_price,
+      special_price_start,
+      special_price_end
     } = productData;
 
     const sql = `
       INSERT INTO products
-      (vendor_id, category_id, name, description, mrp, sale_price, gst_slab_id, stock, weight, is_special_product)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      (vendor_id, category_id, name, description, mrp, sale_price, gst_slab_id, stock, weight, is_special_product, special_price, special_price_start, special_price_end)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     const [result] = await pool.execute(sql, [
-      vendor_id, category_id, name, description, mrp, sale_price, gst_slab_id, stock, weight || 0, is_special_product || 0
+      vendor_id, category_id, name, description, mrp, sale_price, gst_slab_id, stock, weight || 0, is_special_product || 0, special_price || null, special_price_start || null, special_price_end || null
     ]);
 
     return result;
@@ -108,13 +111,13 @@ const Product = {
    */
   async update(productId, productData) {
     // This is a simplified update. A real app might have more complex logic.
-    const { name, description, mrp, sale_price, stock, status, weight, is_special_product } = productData;
+    const { name, description, mrp, sale_price, stock, status, weight, is_special_product, special_price, special_price_start, special_price_end } = productData;
     const sql = `
       UPDATE products
-      SET name = ?, description = ?, mrp = ?, sale_price = ?, stock = ?, status = ?, weight = ?, is_special_product = ?
+      SET name = ?, description = ?, mrp = ?, sale_price = ?, stock = ?, status = ?, weight = ?, is_special_product = ?, special_price = ?, special_price_start = ?, special_price_end = ?
       WHERE id = ?
     `;
-    const [result] = await pool.execute(sql, [name, description, mrp, sale_price, stock, status, weight, is_special_product, productId]);
+    const [result] = await pool.execute(sql, [name, description, mrp, sale_price, stock, status, weight, is_special_product, special_price || null, special_price_start || null, special_price_end || null, productId]);
     return result;
   },
 

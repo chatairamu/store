@@ -63,6 +63,22 @@
             <input type="number" class="form-control" id="packaging_charge_override" name="packaging_charge_override" step="0.01" placeholder="Leave blank for vendor default">
         </div>
     </div>
+    <hr>
+    <h5>Promotional Pricing (Optional)</h5>
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label for="special_price" class="form-label">Special Price (₹)</label>
+            <input type="number" class="form-control" id="special_price" name="special_price" step="0.01">
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="special_price_start" class="form-label">Sale Start Date</label>
+            <input type="datetime-local" class="form-control" id="special_price_start" name="special_price_start">
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="special_price_end" class="form-label">Sale End Date</label>
+            <input type="datetime-local" class="form-control" id="special_price_end" name="special_price_end">
+        </div>
+    </div>
     <button type="submit" class="btn btn-primary">Add Product</button>
     <a href="/vendor/products" class="btn btn-secondary">Cancel</a>
 </form>

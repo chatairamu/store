@@ -13,7 +13,6 @@ This document outlines the features from the original project description that h
 
 - **Advanced Product Settings**:
   - Product tagging system for better filtering and search.
-  - Logic for `special_price` and `discount_type` fields.
 
 ## III. Security
 
