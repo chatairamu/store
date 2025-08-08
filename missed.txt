@@ -4,10 +4,6 @@ This document outlines the features from the original project description that h
 
 ## I. Core Systems
 
-- **Live Order Tracking**:
-  - Integration with Leaflet.js to show a live map of the delivery partner's location.
-  - This would require an API endpoint for the delivery partner's app to periodically send its coordinates.
-
 ## II. Advanced Logic & Customization
 
 - **Full GST/Tax Calculation**:

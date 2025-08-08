@@ -373,6 +373,8 @@ CREATE TABLE `delivery_partners` (
   `password` varchar(255) NOT NULL,
   `vehicle_number` varchar(50) DEFAULT NULL,
   `status` enum('active','inactive','on_delivery') NOT NULL DEFAULT 'active',
+  `current_latitude` decimal(10,8) DEFAULT NULL,
+  `current_longitude` decimal(11,8) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)

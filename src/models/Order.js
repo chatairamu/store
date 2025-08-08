@@ -226,4 +226,21 @@ const Order = {
   }
 };
 
+  /**
+   * Gets the current location of the delivery partner assigned to a specific order.
+   * @param {number} orderId - The ID of the order.
+   * @returns {Promise<object|null>} An object with lat/lng, or null if not found.
+   */
+  async getDeliveryPartnerLocation(orderId) {
+    const sql = `
+      SELECT dp.current_latitude, dp.current_longitude
+      FROM delivery_partners dp
+      JOIN order_delivery od ON dp.id = od.delivery_partner_id
+      WHERE od.order_id = ?
+    `;
+    const [rows] = await pool.execute(sql, [orderId]);
+    return rows[0] || null;
+  }
+};
+
 module.exports = Order;

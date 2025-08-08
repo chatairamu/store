@@ -46,6 +46,22 @@ exports.getWishlistPage = async (req, res) => {
     }
 };
 
+exports.getTrackOrderPage = async (req, res) => {
+    try {
+        const { orderId } = req.params;
+        // You might want to fetch order details here to show on the page
+        // For now, just pass the ID
+        res.render('track-order', {
+            title: `Track Order #${orderId}`,
+            orderId: orderId,
+            user: req.user
+        });
+    } catch (error) {
+        console.error('Get Track Order Page Error:', error);
+        res.status(500).send('Server Error');
+    }
+};
+
 const Product = require('../models/Product');
 const Review = require('../models/Review');
 

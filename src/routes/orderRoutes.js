@@ -24,4 +24,9 @@ router.get('/', orderController.getUserOrders);
 // @access  Protected
 router.get('/:id', orderController.getOrderDetails);
 
+// @route   GET /api/orders/:orderId/location
+// @desc    Get the location of the delivery partner for an order
+// @access  Protected
+router.get('/:orderId/location', orderController.getOrderLocation);
+
 module.exports = router;

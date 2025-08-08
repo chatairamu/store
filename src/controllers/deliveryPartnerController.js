@@ -28,6 +28,28 @@ exports.getDashboardPage = async (req, res) => {
 };
 
 /**
+ * Handles a location update from a delivery partner.
+ * @route POST /api/delivery/location
+ */
+exports.updateLocation = async (req, res) => {
+    try {
+        const { lat, lng } = req.body;
+        const partnerId = req.partner.id;
+
+        if (lat === undefined || lng === undefined) {
+            return res.status(400).json({ message: 'Latitude and longitude are required.' });
+        }
+
+        await DeliveryPartner.updateLocation(partnerId, lat, lng);
+        res.status(200).json({ message: 'Location updated successfully.' });
+
+    } catch (error) {
+        console.error('Update Location Error:', error);
+        res.status(500).json({ message: 'Server error while updating location.' });
+    }
+};
+
+/**
  * Renders the delivery partner's assigned orders page.
  * @route GET /delivery/orders
  */

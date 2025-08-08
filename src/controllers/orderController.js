@@ -104,3 +104,32 @@ exports.getOrderDetails = async (req, res) => {
     res.status(500).json({ message: 'Server error while fetching order details.' });
   }
 };
+
+/**
+ * Get the location of the delivery partner for a specific order.
+ * @route GET /api/orders/:orderId/location
+ * @access Protected
+ */
+exports.getOrderLocation = async (req, res) => {
+    try {
+        const { orderId } = req.params;
+        const userId = req.user.id;
+
+        // Security check: Ensure the order belongs to the user requesting it
+        const order = await Order.findById(orderId);
+        if (!order || order.user_id !== userId) {
+            return res.status(403).json({ message: 'Not authorized to access this order\'s location.' });
+        }
+
+        const location = await Order.getDeliveryPartnerLocation(orderId);
+        if (!location || !location.current_latitude) {
+            return res.status(404).json({ message: 'Location not available yet.' });
+        }
+
+        res.status(200).json(location);
+
+    } catch (error) {
+        console.error('Get Order Location Error:', error);
+        res.status(500).json({ message: 'Server error while fetching location.' });
+    }
+};

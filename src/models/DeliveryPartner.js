@@ -68,4 +68,18 @@ const DeliveryPartner = {
   }
 };
 
+  /**
+   * Updates the location of a delivery partner.
+   * @param {number} partnerId - The ID of the delivery partner.
+   * @param {number} lat - The new latitude.
+   * @param {number} lng - The new longitude.
+   * @returns {Promise<object>} The result of the update operation.
+   */
+  async updateLocation(partnerId, lat, lng) {
+    const sql = 'UPDATE delivery_partners SET current_latitude = ?, current_longitude = ? WHERE id = ?';
+    const [result] = await pool.execute(sql, [lat, lng, partnerId]);
+    return result;
+  }
+};
+
 module.exports = DeliveryPartner;

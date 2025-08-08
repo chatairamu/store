@@ -54,6 +54,9 @@ app.use('/api/wishlist', wishlistRoutes);
 const paymentRoutes = require('./src/routes/paymentRoutes');
 app.use('/api/payments', paymentRoutes);
 
+const deliveryApiRoutes = require('./src/routes/deliveryApiRoutes');
+app.use('/api/delivery', deliveryApiRoutes);
+
 // View & Page Routes
 const vendorRoutes = require('./src/routes/vendorRoutes');
 const deliveryPartnerRoutes = require('./src/routes/deliveryPartnerRoutes');

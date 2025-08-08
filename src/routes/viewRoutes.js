@@ -27,6 +27,7 @@ router.get('/register', viewController.getRegisterPage);
 router.get('/account', protect, viewController.getAccountPage);
 router.get('/checkout', protect, viewController.getCheckoutPage);
 router.get('/wishlist', protect, viewController.getWishlistPage);
+router.get('/track-order/:orderId', protect, viewController.getTrackOrderPage);
 
 
 module.exports = router;
