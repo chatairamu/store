@@ -32,9 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Render summary
         cartSummary.innerHTML = `
             <h5>Cart Summary</h5>
-            <p>Subtotal: ₹${cart.subtotal.toFixed(2)}</p>
-            <p>GST (18%): ₹${(cart.subtotal * 0.18).toFixed(2)}</p>
-            <p><strong>Total: ₹${(cart.subtotal * 1.18).toFixed(2)}</strong></p>
+            <p>Subtotal: ₹${cart.totals.subtotal.toFixed(2)}</p>
+            <p>GST: ₹${cart.totals.gstTotal.toFixed(2)}</p>
+            <p><strong>Total: ₹${cart.totals.grandTotal.toFixed(2)}</strong></p>
             <a href="/checkout" class="btn btn-primary w-100">Proceed to Checkout</a>
         `;
     };

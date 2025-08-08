@@ -6,9 +6,6 @@ This document outlines the features from the original project description that h
 
 ## II. Advanced Logic & Customization
 
-- **Full GST/Tax Calculation**:
-  - The current system has a placeholder for GST. A full implementation would read the `gst_slab_id` from each product and calculate taxes accurately based on the `gst_slabs` table.
-
 - **Advanced Vendor Settings**:
   - Per-vendor delivery charge logic (e.g., distance-based, per-product).
   - Vendor commission calculation (fixed or percentage) to be reflected in earnings reports.

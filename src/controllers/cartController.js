@@ -56,12 +56,19 @@ exports.addToCart = async (req, res) => {
  * @route PUT /api/cart/:itemId
  * @access Protected
  */
+const { calculateTotals } = require('../utils/taxCalculator');
+
 // Reusable helper function to get full cart details
 const getFullCart = async (userId) => {
     const cart = await Cart.findOrCreateByUserId(userId);
     const items = await Cart.getCartItems(cart.id);
-    const subtotal = items.reduce((acc, item) => acc + (item.sale_price * item.quantity), 0);
-    return { cartId: cart.id, items, subtotal };
+    const totals = await calculateTotals(items);
+
+    return {
+        cartId: cart.id,
+        items,
+        totals
+    };
 };
 
 exports.getCart = async (req, res) => {

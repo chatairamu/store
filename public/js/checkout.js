@@ -39,8 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 summaryHtml += '</ul>';
                 orderSummaryDiv.innerHTML = summaryHtml;
-                // Note: This total is simplified. A real app would get the final total from the server.
-                totalAmountSpan.textContent = cartData.subtotal.toFixed(2);
+                // Use the accurate totals from the API
+                totalAmountSpan.textContent = cartData.totals.grandTotal.toFixed(2);
             }
         } catch (error) {
             orderSummaryDiv.innerHTML = `<p class="text-danger">${error.message}</p>`;
@@ -54,8 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
         paymentMessageDiv.className = 'alert alert-info';
 
         try {
-            // 3. Create a Razorpay order from our backend
-            const amountInPaise = Math.round(cartData.subtotal * 100);
+            // 3. Create a Razorpay order from our backend using the accurate grand total
+            const amountInPaise = Math.round(cartData.totals.grandTotal * 100);
             const orderRes = await fetch('/api/payments/create-order', {
                 method: 'POST',
                 headers: {

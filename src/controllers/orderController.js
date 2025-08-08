@@ -27,24 +27,31 @@ exports.createOrder = async (req, res) => {
       return res.status(400).json({ message: 'Your cart is empty.' });
     }
 
+    const { calculateTotals } = require('../utils/taxCalculator');
+
     // This assumes all items in the cart are from the same vendor.
     // A real multi-vendor cart would be more complex.
     const [firstItem] = await pool.execute('SELECT vendor_id FROM products WHERE id = ?', [items[0].product_id]);
     const vendor_id = firstItem[0].vendor_id;
 
-    // 2. Calculate totals (this is a simplified calculation)
-    const sub_total = items.reduce((acc, item) => acc + (item.sale_price * item.quantity), 0);
-    const delivery_charge = 50.00; // Placeholder
-    const packaging_charge = items.length * 10.00; // Placeholder
-    const gst_total = sub_total * 0.18; // Placeholder for 18% GST
-    const order_total = sub_total + delivery_charge + packaging_charge + gst_total;
+    // 2. Calculate accurate totals using the utility
+    const { subtotal, gstTotal, grandTotal } = await calculateTotals(items);
+    const delivery_charge = 50.00; // This would come from a delivery charge calculator
+    const packaging_charge = items.length * 10.00; // This could be more complex too
+    const order_total = grandTotal + delivery_charge + packaging_charge;
 
     // 3. Prepare order data
     const orderData = {
       vendor_id,
       address_id,
-      sub_total,
+      sub_total: subtotal,
       delivery_charge,
+      packaging_charge,
+      gst_total: gstTotal,
+      order_total,
+      payment_method,
+      delivery_type
+    };
       packaging_charge,
       gst_total,
       order_total,
