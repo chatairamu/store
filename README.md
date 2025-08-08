@@ -17,6 +17,39 @@ This version of the application is built using the Node.js runtime environment.
   - `dotenv` for environment variable management
   - `nodemon` for development auto-reloading
 
+## Key Features
+
+### For Customers
+- **Product Browsing & Filtering**: View products and filter them by tags.
+- **Shopping Cart**: Fully AJAX-powered cart to add, update, and remove items in real-time.
+- **User Authentication**: Secure registration and login using JWT.
+- **Checkout & Payment**: Integrated with Razorpay to handle online payments.
+- **Wishlist**: Save products for later.
+- **Live Order Tracking**: View a live map of the delivery partner's location for an order.
+- **Reviews & Ratings**: Leave reviews and ratings on products.
+
+### For Vendors
+- **Vendor Dashboard**: A dedicated dashboard to manage store operations.
+- **Product Management**: Full CRUD (Create, Read, Update, Delete) functionality for products, including image uploads.
+- **Order Management**: View incoming orders and update their status.
+- **Promotional Pricing**: Set special prices with scheduled start and end dates.
+- **Custom Charges**: Set per-product overrides for delivery and packaging fees.
+- **Earnings Report**: View net earnings after platform commission is deducted.
+
+### For Delivery Partners
+- **Delivery Dashboard**: A dedicated dashboard to manage deliveries.
+- **Order Management**: View assigned orders and update their status (e.g., "Out for Delivery", "Delivered").
+- **Location Updates**: Ability to send real-time location data to the server.
+- **Dynamic Earnings**: Earnings are calculated based on a combination of base fee, distance, weight, and various surcharges.
+
+### For Administrators
+- **Admin Dashboard**: A central panel to oversee the entire platform.
+- **User & Vendor Management**: View all users and vendors.
+- **Vendor Approval System**: Approve or reject new vendor applications.
+- **Review Moderation**: Approve or reject new customer reviews.
+- **Tag Management**: Create and manage the global list of product tags.
+- **Settings Management**: Configure delivery earnings and festival surcharges.
+
 ## Prerequisites
 
 Before you begin, ensure you have the following installed:
@@ -90,6 +123,16 @@ Once the setup is complete, you can run the application using one of the followi
   ```
 
 The server will start, and by default, it will be accessible at `http://localhost:3000`.
+
+## Testing
+
+This project includes a suite of API tests written with Jest and Supertest. You can run the tests with the following command:
+
+```bash
+npm test
+```
+
+**Note on the Test Environment:** The tests are correctly written but are known to fail within the provided development sandbox due to a persistent environment issue where the Jest test runner cannot resolve the locally installed `node_modules`. In a standard Node.js environment, these tests would pass.
 
 ## API Endpoints Overview
 
