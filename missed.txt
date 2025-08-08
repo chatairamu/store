@@ -4,11 +4,6 @@ This document outlines the features from the original project description that h
 
 ## I. Core Systems
 
-- **Payment Gateway Integration**:
-  - Full integration with Razorpay API for processing online payments.
-  - Handling payment success/failure webhooks.
-  - The current system only saves the payment method (COD/Razorpay) but does not process payments.
-
 - **Reviews and Ratings System**:
   - UI and API for customers to leave reviews/ratings on products and vendors.
   - A moderation system for admins to approve/reject reviews.
@@ -40,6 +35,7 @@ This document outlines the features from the original project description that h
 
 - **Advanced Cart & Checkout**:
   - Full AJAX-based cart page for real-time updates without page reloads.
+  - Integration with Google Maps API for address selection and validation.
 
 ## III. Security
 

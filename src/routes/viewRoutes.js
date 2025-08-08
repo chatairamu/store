@@ -3,36 +3,26 @@
 
 const express = require('express');
 const router = express.Router();
+const viewController = require('../controllers/viewController');
+const { protect } = require('../middleware/authMiddleware'); // To protect account/checkout pages
 
 // Home page
-router.get('/', (req, res) => {
-  res.render('index', { title: 'Home' });
-});
+router.get('/', viewController.getHomePage);
 
 // Products page
-router.get('/products', (req, res) => {
-  res.render('products', { title: 'Products' });
-});
+router.get('/products', viewController.getProductsPage);
 
 // Cart page
-router.get('/cart', (req, res) => {
-  res.render('cart', { title: 'Cart' });
-});
+router.get('/cart', viewController.getCartPage);
 
-// Account page
-router.get('/account', (req, res) => {
-  // This should be a protected route in a real app
-  res.render('account', { title: 'My Account' });
-});
+// Login & Register pages
+router.get('/login', viewController.getLoginPage);
+router.get('/register', viewController.getRegisterPage);
 
-// Login page
-router.get('/login', (req, res) => {
-  res.render('login', { title: 'Login' });
-});
+// --- Protected View Routes ---
+// The following routes require a user to be logged in.
+router.get('/account', protect, viewController.getAccountPage);
+router.get('/checkout', protect, viewController.getCheckoutPage);
 
-// Register page
-router.get('/register', (req, res) => {
-  res.render('register', { title: 'Register' });
-});
 
 module.exports = router;
