@@ -40,7 +40,6 @@ This document outlines the features from the original project description that h
 
 - **Advanced Cart & Checkout**:
   - Full AJAX-based cart page for real-time updates without page reloads.
-  - Integration with Google Maps API for address selection and validation.
 
 ## III. Security
 
