@@ -18,7 +18,11 @@ exports.getCheckoutPage = (req, res) => {
 };
 
 exports.getAccountPage = (req, res) => {
-  res.render('account', { title: 'My Account' });
+  res.render('account', {
+    title: 'My Account',
+    user: req.user,
+    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY
+  });
 };
 
 exports.getLoginPage = (req, res) => {

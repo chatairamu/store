@@ -56,6 +56,24 @@ exports.addToCart = async (req, res) => {
  * @route PUT /api/cart/:itemId
  * @access Protected
  */
+// Reusable helper function to get full cart details
+const getFullCart = async (userId) => {
+    const cart = await Cart.findOrCreateByUserId(userId);
+    const items = await Cart.getCartItems(cart.id);
+    const subtotal = items.reduce((acc, item) => acc + (item.sale_price * item.quantity), 0);
+    return { cartId: cart.id, items, subtotal };
+};
+
+exports.getCart = async (req, res) => {
+  try {
+    const cartData = await getFullCart(req.user.id);
+    res.status(200).json(cartData);
+  } catch (error) {
+    console.error('Get Cart Error:', error);
+    res.status(500).json({ message: 'Server error while fetching the cart.' });
+  }
+};
+
 exports.updateCartItem = async (req, res) => {
     try {
         const { itemId } = req.params;
@@ -65,17 +83,19 @@ exports.updateCartItem = async (req, res) => {
             return res.status(400).json({ message: 'Please provide a valid quantity.' });
         }
 
-        // TODO: Add a check to ensure the item belongs to the user's cart for security.
+        // TODO: Security check to ensure item belongs to user's cart
 
         await Cart.updateItemQuantity(itemId, quantity);
 
-        res.status(200).json({ message: 'Cart item updated successfully.' });
+        // After updating, send back the new state of the cart
+        const updatedCart = await getFullCart(req.user.id);
+        res.status(200).json({ message: 'Cart updated successfully.', cart: updatedCart });
+
     } catch (error) {
         console.error('Update Cart Item Error:', error);
         res.status(500).json({ message: 'Server error while updating cart item.' });
     }
 };
-
 
 /**
  * Remove an item from the cart.
@@ -86,11 +106,14 @@ exports.removeFromCart = async (req, res) => {
   try {
     const { itemId } = req.params;
 
-    // TODO: Add a check to ensure the item belongs to the user's cart for security.
+    // TODO: Security check
 
     await Cart.removeItem(itemId);
 
-    res.status(200).json({ message: 'Item removed from cart successfully.' });
+    // After removing, send back the new state of the cart
+    const updatedCart = await getFullCart(req.user.id);
+    res.status(200).json({ message: 'Item removed successfully.', cart: updatedCart });
+
   } catch (error) {
     console.error('Remove from Cart Error:', error);
     res.status(500).json({ message: 'Server error while removing item from cart.' });
