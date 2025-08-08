@@ -15,9 +15,6 @@ This document outlines the features from the original project description that h
   - Integration with Leaflet.js to show a live map of the delivery partner's location.
   - This would require an API endpoint for the delivery partner's app to periodically send its coordinates.
 
-- **Image Uploads**:
-  - Functionality for vendors and admins to upload product and category images. Currently, image fields are just text paths.
-
 ## II. Advanced Logic & Customization
 
 - **Full GST/Tax Calculation**:

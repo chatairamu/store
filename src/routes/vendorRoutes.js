@@ -25,15 +25,27 @@ router.get('/products/add', vendorController.getAddProductPage);
 // @access  Protected/Vendor
 router.get('/products', vendorController.getProductsPage);
 
+const upload = require('../middleware/uploadMiddleware');
+
 // @route   POST /vendor/products
 // @desc    Create a new product
 // @access  Protected/Vendor
-router.post('/products', vendorController.createProduct);
+router.post('/products', upload.single('product_image'), vendorController.createProduct);
 
 // @route   DELETE /vendor/products/:id
 // @desc    Delete a product
 // @access  Protected/Vendor
 router.delete('/products/:id', vendorController.deleteProduct);
+
+// @route   GET /vendor/products/edit/:id
+// @desc    Display the form to edit a product
+// @access  Protected/Vendor
+router.get('/products/edit/:id', vendorController.getEditProductPage); // I will create this controller function next
+
+// @route   POST /vendor/products/edit/:id
+// @desc    Update a product
+// @access  Protected/Vendor
+router.post('/products/edit/:id', upload.single('product_image'), vendorController.updateProduct); // I will create this controller function next
 
 // @route   GET /vendor/orders
 // @desc    Get the order management page for the vendor

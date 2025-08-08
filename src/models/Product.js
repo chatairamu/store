@@ -130,4 +130,19 @@ const Product = {
   }
 };
 
+  /**
+   * Adds an image record for a product.
+   * @param {number} productId - The ID of the product.
+   * @param {string} imagePath - The path to the uploaded image.
+   * @returns {Promise<object>}
+   */
+  async addImage(productId, imagePath) {
+    // For simplicity, we assume one featured image per product.
+    // A more complex system might handle multiple images and update existing ones.
+    const sql = 'INSERT INTO product_images (product_id, image_path, is_featured) VALUES (?, ?, ?)';
+    const [result] = await pool.execute(sql, [productId, imagePath, 1]);
+    return result;
+  }
+};
+
 module.exports = Product;

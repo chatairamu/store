@@ -1,0 +1,48 @@
+<%- include('partials/header') %>
+<%- include('partials/sidebar') %>
+
+<h1 class="mt-4">Edit Product: <%= product.name %></h1>
+<p class="lead">Update the details for your product below.</p>
+
+<form action="/vendor/products/edit/<%= product.id %>" method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="name" class="form-label">Product Name</label>
+        <input type="text" class="form-control" id="name" name="name" value="<%= product.name %>" required>
+    </div>
+    <div class="mb-3">
+        <label for="product_image" class="form-label">New Product Image (Optional)</label>
+        <input class="form-control" type="file" id="product_image" name="product_image">
+        <small class="form-text text-muted">Only upload a new image if you want to replace the current one.</small>
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description" name="description" rows="3"><%= product.description %></textarea>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="mrp" class="form-label">MRP</label>
+            <input type="number" class="form-control" id="mrp" name="mrp" value="<%= product.mrp %>" step="0.01" required>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="sale_price" class="form-label">Sale Price</label>
+            <input type="number" class="form-control" id="sale_price" name="sale_price" value="<%= product.sale_price %>" step="0.01" required>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="stock" class="form-label">Stock Quantity</label>
+            <input type="number" class="form-control" id="stock" name="stock" value="<%= product.stock %>" required>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="status" class="form-label">Status</label>
+            <select class="form-select" id="status" name="status" required>
+                <option value="active" <%= product.status === 'active' ? 'selected' : '' %>>Active</option>
+                <option value="inactive" <%= product.status === 'inactive' ? 'selected' : '' %>>Inactive</option>
+            </select>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Update Product</button>
+    <a href="/vendor/products" class="btn btn-secondary">Cancel</a>
+</form>
+
+<%- include('partials/footer') %>

@@ -68,11 +68,19 @@ exports.createProduct = async (req, res) => {
     // Basic validation
     const { name, mrp, sale_price, category_id, gst_slab_id } = productData;
     if (!name || !mrp || !sale_price || !category_id || !gst_slab_id) {
-      // In a real app, you'd render the form again with an error message.
       return res.status(400).send('Missing required fields.');
     }
 
-    await Product.create(productData);
+    // Create product in DB
+    const result = await Product.create(productData);
+    const newProductId = result.insertId;
+
+    // Handle file upload
+    if (req.file) {
+      const imagePath = req.file.path.replace('public/', ''); // Store relative path
+      await Product.addImage(newProductId, imagePath);
+    }
+
     res.redirect('/vendor/products');
 
   } catch (error) {
@@ -103,6 +111,65 @@ exports.deleteProduct = async (req, res) => {
     } catch (error) {
         console.error('Vendor Delete Product Error:', error);
         res.status(500).json({ message: 'Server error while deleting product.' });
+    }
+};
+
+/**
+ * Renders the page for editing an existing product.
+ * @route GET /vendor/products/edit/:id
+ */
+exports.getEditProductPage = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const vendorId = req.vendor.id;
+        const product = await Product.findById(productId);
+
+        // Security Check: Ensure the product belongs to the vendor
+        if (!product || product.vendor_id !== vendorId) {
+            return res.status(403).send('Not authorized to edit this product.');
+        }
+
+        res.render('vendor/editProduct', { // I will create this view next
+            title: 'Edit Product',
+            vendor: req.vendor,
+            product: product
+        });
+    } catch (error) {
+        console.error('Get Edit Product Page Error:', error);
+        res.status(500).send('Server Error');
+    }
+};
+
+/**
+ * Handles the update of an existing product.
+ * @route POST /vendor/products/edit/:id
+ */
+exports.updateProduct = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const vendorId = req.vendor.id;
+        const productData = req.body;
+
+        // Security Check
+        const product = await Product.findById(productId);
+        if (!product || product.vendor_id !== vendorId) {
+            return res.status(403).send('Not authorized to update this product.');
+        }
+
+        await Product.update(productId, productData);
+
+        if (req.file) {
+            // Handle new image upload - a more robust system would delete the old image
+            const imagePath = req.file.path.replace('public/', '');
+            // This simple addImage assumes one image. A real system would need an updateOrAddImage method.
+            await Product.addImage(productId, imagePath);
+        }
+
+        res.redirect('/vendor/products');
+
+    } catch (error) {
+        console.error('Update Product Error:', error);
+        res.status(500).send('Server Error');
     }
 };
 

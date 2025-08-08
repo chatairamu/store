@@ -4,10 +4,14 @@
 <h1 class="mt-4">Add a New Product</h1>
 <p class="lead">Fill out the form below to add a new product to your store.</p>
 
-<form action="/vendor/products" method="POST">
+<form action="/vendor/products" method="POST" enctype="multipart/form-data">
     <div class="mb-3">
         <label for="name" class="form-label">Product Name</label>
         <input type="text" class="form-control" id="name" name="name" required>
+    </div>
+    <div class="mb-3">
+        <label for="product_image" class="form-label">Product Image</label>
+        <input class="form-control" type="file" id="product_image" name="product_image">
     </div>
     <div class="mb-3">
         <label for="description" class="form-label">Description</label>
