@@ -1,0 +1,78 @@
+<%- include('partials/header') %>
+<%- include('partials/sidebar') %>
+
+<h1 class="mt-4">Festival Surcharges</h1>
+<p class="lead">Add or remove date-based surcharges for delivery fees.</p>
+
+<div class="card mb-4">
+    <div class="card-header">Add New Surcharge</div>
+    <div class="card-body">
+        <form action="/admin/settings/festivals" method="POST">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="festival_name" class="form-label">Festival Name</label>
+                    <input type="text" class="form-control" id="festival_name" name="festival_name" required>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <label for="charge_percentage" class="form-label">Surcharge (%)</label>
+                    <input type="number" class="form-control" id="charge_percentage" name="charge_percentage" step="0.01" required>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="start_date" class="form-label">Start Date</label>
+                    <input type="date" class="form-control" id="start_date" name="start_date" required>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="end_date" class="form-label">End Date</label>
+                    <input type="date" class="form-control" id="end_date" name="end_date" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Surcharge</button>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">Existing Surcharges</div>
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Surcharge</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (surcharges.length > 0) { %>
+                    <% surcharges.forEach(surcharge => { %>
+                        <tr>
+                            <td><%= surcharge.festival_name %></td>
+                            <td><%= surcharge.charge_percentage %>%</td>
+                            <td><%= new Date(surcharge.start_date).toLocaleDateString() %></td>
+                            <td><%= new Date(surcharge.end_date).toLocaleDateString() %></td>
+                            <td>
+                                <span class="badge bg-<%= surcharge.status === 'active' ? 'success' : 'secondary' %>">
+                                    <%= surcharge.status %>
+                                </span>
+                            </td>
+                            <td>
+                                <!-- Add delete/edit buttons here in the future -->
+                                <button class="btn btn-sm btn-danger disabled">Delete</button>
+                            </td>
+                        </tr>
+                    <% }); %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="6" class="text-center">No festival surcharges have been configured.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<%- include('partials/footer') %>

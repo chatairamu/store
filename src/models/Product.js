@@ -65,17 +65,19 @@ const Product = {
       mrp,
       sale_price,
       gst_slab_id,
-      stock
+      stock,
+      weight,
+      is_special_product
     } = productData;
 
     const sql = `
       INSERT INTO products
-      (vendor_id, category_id, name, description, mrp, sale_price, gst_slab_id, stock)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      (vendor_id, category_id, name, description, mrp, sale_price, gst_slab_id, stock, weight, is_special_product)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     const [result] = await pool.execute(sql, [
-      vendor_id, category_id, name, description, mrp, sale_price, gst_slab_id, stock
+      vendor_id, category_id, name, description, mrp, sale_price, gst_slab_id, stock, weight || 0, is_special_product || 0
     ]);
 
     return result;
@@ -106,13 +108,13 @@ const Product = {
    */
   async update(productId, productData) {
     // This is a simplified update. A real app might have more complex logic.
-    const { name, description, mrp, sale_price, stock, status } = productData;
+    const { name, description, mrp, sale_price, stock, status, weight, is_special_product } = productData;
     const sql = `
       UPDATE products
-      SET name = ?, description = ?, mrp = ?, sale_price = ?, stock = ?, status = ?
+      SET name = ?, description = ?, mrp = ?, sale_price = ?, stock = ?, status = ?, weight = ?, is_special_product = ?
       WHERE id = ?
     `;
-    const [result] = await pool.execute(sql, [name, description, mrp, sale_price, stock, status, productId]);
+    const [result] = await pool.execute(sql, [name, description, mrp, sale_price, stock, status, weight, is_special_product, productId]);
     return result;
   },
 

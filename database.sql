@@ -109,6 +109,8 @@ CREATE TABLE `products` (
   `gst_slab_id` int(11) NOT NULL,
   `delivery_charge_override` decimal(10,2) DEFAULT NULL,
   `packaging_charge_override` decimal(10,2) DEFAULT NULL,
+  `weight` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `is_special_product` tinyint(1) NOT NULL DEFAULT 0,
   `status` enum('active','inactive') NOT NULL DEFAULT 'active',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
@@ -394,6 +396,50 @@ CREATE TABLE `order_delivery` (
   KEY `delivery_partner_id` (`delivery_partner_id`),
   CONSTRAINT `fk_delivery_order` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_delivery_partner` FOREIGN KEY (`delivery_partner_id`) REFERENCES `delivery_partners` (`id`) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `delivery_settings`
+--
+
+CREATE TABLE `delivery_settings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `setting_key` varchar(255) NOT NULL,
+  `setting_value` varchar(255) NOT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `setting_key` (`setting_key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `delivery_settings`
+--
+
+INSERT INTO `delivery_settings` (`setting_key`, `setting_value`) VALUES
+('base_fee', '20.00'),
+('rate_per_km', '5.00'),
+('rate_per_kg', '2.00'),
+('heavy_weight_threshold_kg', '5.00'),
+('heavy_weight_surcharge', '25.00'),
+('special_product_surcharge', '15.00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `festival_surcharges`
+--
+
+CREATE TABLE `festival_surcharges` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `festival_name` varchar(255) NOT NULL,
+  `charge_percentage` decimal(5,2) NOT NULL DEFAULT 0.00,
+  `start_date` date NOT NULL,
+  `end_date` date NOT NULL,
+  `status` enum('active','inactive') NOT NULL DEFAULT 'active',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 

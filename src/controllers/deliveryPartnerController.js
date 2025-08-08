@@ -12,9 +12,8 @@ const DeliveryPartner = require('../models/DeliveryPartner');
 exports.getDashboardPage = async (req, res) => {
   try {
     const partnerId = req.partner.id;
-    const FEE_PER_DELIVERY = 30; // Placeholder fee, could be stored in config
 
-    const { earnings, count } = await DeliveryPartner.calculateEarnings(partnerId, FEE_PER_DELIVERY);
+    const { earnings, count } = await DeliveryPartner.calculateEarnings(partnerId);
 
     res.render('delivery-partner/dashboard', {
       title: 'Dashboard',

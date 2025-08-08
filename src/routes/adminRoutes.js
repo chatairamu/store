@@ -35,5 +35,25 @@ router.post('/vendors/:vendorId/status', adminController.updateVendorStatus);
 // @access  Admin
 router.get('/orders', adminController.getOrdersPage);
 
+// @route   GET /admin/settings/delivery
+// @desc    Get the delivery earnings settings page
+// @access  Admin
+router.get('/settings/delivery', adminController.getDeliverySettingsPage);
+
+// @route   POST /admin/settings/delivery
+// @desc    Update the delivery earnings settings
+// @access  Admin
+router.post('/settings/delivery', adminController.updateDeliverySettings);
+
+// @route   GET /admin/settings/festivals
+// @desc    Get the festival surcharges page
+// @access  Admin
+router.get('/settings/festivals', adminController.getFestivalSurchargesPage);
+
+// @route   POST /admin/settings/festivals
+// @desc    Add a new festival surcharge
+// @access  Admin
+router.post('/settings/festivals', adminController.addFestivalSurcharge);
+
 
 module.exports = router;

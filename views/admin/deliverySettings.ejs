@@ -1,0 +1,51 @@
+<%- include('partials/header') %>
+<%- include('partials/sidebar') %>
+
+<h1 class="mt-4">Delivery Earnings Settings</h1>
+<p class="lead">Configure how delivery partner earnings are calculated.</p>
+
+<form action="/admin/settings/delivery" method="POST">
+    <div class="card">
+        <div class="card-header">Base Calculation</div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="base_fee" class="form-label">Base Fee per Order (₹)</label>
+                    <input type="number" class="form-control" id="base_fee" name="base_fee" value="<%= settings.base_fee %>" step="0.01">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="rate_per_km" class="form-label">Rate per Kilometer (₹)</label>
+                    <input type="number" class="form-control" id="rate_per_km" name="rate_per_km" value="<%= settings.rate_per_km %>" step="0.01">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="rate_per_kg" class="form-label">Rate per Kilogram (₹)</label>
+                    <input type="number" class="form-control" id="rate_per_kg" name="rate_per_kg" value="<%= settings.rate_per_kg %>" step="0.01">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-header">Surcharges</div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="heavy_weight_threshold_kg" class="form-label">Heavy Order Threshold (kg)</label>
+                    <input type="number" class="form-control" id="heavy_weight_threshold_kg" name="heavy_weight_threshold_kg" value="<%= settings.heavy_weight_threshold_kg %>" step="0.01">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="heavy_weight_surcharge" class="form-label">Heavy Order Surcharge (₹)</label>
+                    <input type="number" class="form-control" id="heavy_weight_surcharge" name="heavy_weight_surcharge" value="<%= settings.heavy_weight_surcharge %>" step="0.01">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="special_product_surcharge" class="form-label">Special Product Surcharge (₹)</label>
+                    <input type="number" class="form-control" id="special_product_surcharge" name="special_product_surcharge" value="<%= settings.special_product_surcharge %>" step="0.01">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-4">Save Settings</button>
+</form>
+
+<%- include('partials/footer') %>

@@ -34,6 +34,75 @@ exports.getDashboardPage = async (req, res) => {
 };
 
 /**
+ * Renders the festival surcharges page.
+ * @route GET /admin/settings/festivals
+ */
+exports.getFestivalSurchargesPage = async (req, res) => {
+    try {
+        const FestivalSurcharge = require('../models/FestivalSurcharge');
+        const surcharges = await FestivalSurcharge.findAll();
+        res.render('admin/festivalSurcharges', {
+            title: 'Festival Surcharges',
+            surcharges
+        });
+    } catch (error) {
+        console.error('Get Festival Surcharges Error:', error);
+        res.status(500).send('Server Error');
+    }
+};
+
+/**
+ * Handles adding a new festival surcharge.
+ * @route POST /admin/settings/festivals
+ */
+exports.addFestivalSurcharge = async (req, res) => {
+    try {
+        const { festival_name, charge_percentage, start_date, end_date } = req.body;
+        const sql = 'INSERT INTO festival_surcharges (festival_name, charge_percentage, start_date, end_date) VALUES (?, ?, ?, ?)';
+        const pool = require('../config/db');
+        await pool.execute(sql, [festival_name, charge_percentage, start_date, end_date]);
+        res.redirect('/admin/settings/festivals');
+    } catch (error) {
+        console.error('Add Festival Surcharge Error:', error);
+        res.status(500).send('Server Error');
+    }
+};
+
+/**
+ * Renders the delivery settings page.
+ * @route GET /admin/settings/delivery
+ */
+exports.getDeliverySettingsPage = async (req, res) => {
+    try {
+        const Settings = require('../models/Settings');
+        const settings = await Settings.getAllDeliverySettings();
+        res.render('admin/deliverySettings', {
+            title: 'Delivery Settings',
+            settings
+        });
+    } catch (error) {
+        console.error('Get Delivery Settings Error:', error);
+        res.status(500).send('Server Error');
+    }
+};
+
+/**
+ * Handles updating the delivery settings.
+ * @route POST /admin/settings/delivery
+ */
+exports.updateDeliverySettings = async (req, res) => {
+    try {
+        const Settings = require('../models/Settings');
+        // We can pass the req.body directly if the form names match the setting_key
+        await Settings.updateDeliverySettings(req.body);
+        res.redirect('/admin/settings/delivery');
+    } catch (error) {
+        console.error('Update Delivery Settings Error:', error);
+        res.status(500).send('Server Error');
+    }
+};
+
+/**
  * Handles updating a vendor's status (approval/rejection).
  * @route POST /admin/vendors/:id/status
  */

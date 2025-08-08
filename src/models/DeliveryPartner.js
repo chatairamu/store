@@ -45,17 +45,26 @@ const DeliveryPartner = {
    * @param {number} feePerDelivery - The flat fee earned per delivery.
    * @returns {Promise<{earnings: number, count: number}>} The total earnings and count of completed deliveries.
    */
-  async calculateEarnings(partnerId, feePerDelivery) {
+  async calculateEarnings(partnerId) {
+    const { calculateDeliveryEarningsForOrder } = require('../utils/earningsCalculator');
+
+    // 1. Find all delivered orders for this partner
     const sql = `
-      SELECT COUNT(o.id) as completedDeliveries
+      SELECT o.*
       FROM orders o
       JOIN order_delivery od ON o.id = od.order_id
       WHERE od.delivery_partner_id = ? AND o.order_status = 'Delivered'
     `;
-    const [result] = await pool.execute(sql, [partnerId]);
-    const count = result[0].completedDeliveries || 0;
-    const earnings = count * feePerDelivery;
-    return { earnings, count };
+    const [deliveredOrders] = await pool.execute(sql, [partnerId]);
+
+    // 2. Calculate earnings for each order and sum them up
+    let totalEarnings = 0;
+    for (const order of deliveredOrders) {
+      const orderEarning = await calculateDeliveryEarningsForOrder(order);
+      totalEarnings += orderEarning;
+    }
+
+    return { earnings: totalEarnings, count: deliveredOrders.length };
   }
 };
 
