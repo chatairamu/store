@@ -81,6 +81,13 @@ exports.createProduct = async (req, res) => {
       await Product.addImage(newProductId, imagePath);
     }
 
+    // Handle tags
+    const { tags } = req.body;
+    if (tags) {
+        const tagIds = Array.isArray(tags) ? tags : [tags];
+        await Product.updateTags(newProductId, tagIds);
+    }
+
     res.redirect('/vendor/products');
 
   } catch (error) {
@@ -118,21 +125,32 @@ exports.deleteProduct = async (req, res) => {
  * Renders the page for editing an existing product.
  * @route GET /vendor/products/edit/:id
  */
+const Tag = require('../models/Tag');
+
 exports.getEditProductPage = async (req, res) => {
     try {
         const productId = req.params.id;
         const vendorId = req.vendor.id;
-        const product = await Product.findById(productId);
+
+        const [product, tags, productTags] = await Promise.all([
+            Product.findById(productId),
+            Tag.findAll(),
+            Product.getTags(productId)
+        ]);
 
         // Security Check: Ensure the product belongs to the vendor
         if (!product || product.vendor_id !== vendorId) {
             return res.status(403).send('Not authorized to edit this product.');
         }
 
-        res.render('vendor/editProduct', { // I will create this view next
+        const productTagIds = productTags.map(t => t.id);
+
+        res.render('vendor/editProduct', {
             title: 'Edit Product',
             vendor: req.vendor,
-            product: product
+            product: product,
+            allTags: tags,
+            productTagIds: productTagIds
         });
     } catch (error) {
         console.error('Get Edit Product Page Error:', error);
@@ -165,6 +183,11 @@ exports.updateProduct = async (req, res) => {
             await Product.addImage(productId, imagePath);
         }
 
+        // Handle tags
+        const { tags } = req.body;
+        const tagIds = tags ? (Array.isArray(tags) ? tags : [tags]) : [];
+        await Product.updateTags(productId, tagIds);
+
         res.redirect('/vendor/products');
 
     } catch (error) {
@@ -179,11 +202,11 @@ exports.updateProduct = async (req, res) => {
  */
 exports.getAddProductPage = async (req, res) => {
     try {
-        // In a real app, you might need to pass categories and GST slabs
-        // to the view to populate dropdowns.
+        const tags = await Tag.findAll();
         res.render('vendor/addProduct', {
             title: 'Add Product',
-            vendor: req.vendor
+            vendor: req.vendor,
+            allTags: tags
         });
     } catch (error) {
         console.error('Get Add Product Page Error:', error);

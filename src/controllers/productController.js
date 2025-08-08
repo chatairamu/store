@@ -10,8 +10,9 @@ const Product = require('../models/Product');
  */
 exports.getAllProducts = async (req, res) => {
   try {
-    const { categoryId } = req.query;
-    const products = await Product.findAll(categoryId);
+    const { categoryId, tagId } = req.query;
+    const filters = { categoryId, tagId };
+    const products = await Product.findAll(filters);
     res.status(200).json(products);
   } catch (error) {
     console.error('Get All Products Error:', error);

@@ -1,13 +1,28 @@
 <%- include('partials/header', { title: 'Our Products' }) %>
 
 <div class="container mt-4">
-    <h1>Our Products</h1>
-    <p>Browse our delicious offerings from various vendors.</p>
-    <div id="product-list" class="row">
-        <!-- Products will be dynamically inserted here by a script -->
-        <p>Loading products...</p>
+    <div class="row">
+        <div class="col-md-3">
+            <h4>Filter by Tag</h4>
+            <div class="list-group">
+                <a href="/products" class="list-group-item list-group-item-action">All Products</a>
+                <% tags.forEach(tag => { %>
+                    <a href="/products?tagId=<%= tag.id %>" class="list-group-item list-group-item-action">
+                        <%= tag.name %>
+                    </a>
+                <% }); %>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <h1>Our Products</h1>
+            <p>Browse our delicious offerings from various vendors.</p>
+            <div id="product-list" class="row">
+                <!-- Products will be dynamically inserted here by products.js -->
+                <p>Loading products...</p>
+            </div>
+        </div>
     </div>
 </div>
 
 <%- include('partials/footer') %>
-<!-- We would add a script here to fetch and display products -->
+<script src="/js/products.js"></script>

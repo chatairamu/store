@@ -41,6 +41,15 @@
                 <option value="3">Desserts</option>
             </select>
         </div>
+    <div class="mb-3">
+        <label for="tags" class="form-label">Tags</label>
+        <select class="form-select" id="tags" name="tags" multiple>
+            <% allTags.forEach(tag => { %>
+                <option value="<%= tag.id %>"><%= tag.name %></option>
+            <% }); %>
+        </select>
+        <small class="form-text text-muted">Hold Ctrl/Cmd to select multiple tags.</small>
+    </div>
         <div class="col-md-4 mb-3">
             <label for="gst_slab_id" class="form-label">GST Slab</label>
             <select class="form-select" id="gst_slab_id" name="gst_slab_id" required>

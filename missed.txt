@@ -3,6 +3,7 @@
 This document outlines the features from the original project description that have not yet been fully implemented. The core foundation for many of these exists in the database schema and application structure.
 
 ## I. Core Systems
+(All core systems from the initial list are now implemented)
 
 ## II. Advanced Logic & Customization
 
@@ -10,9 +11,6 @@ This document outlines the features from the original project description that h
   - Per-vendor delivery charge logic (e.g., distance-based, per-product).
   - Vendor commission calculation (fixed or percentage) to be reflected in earnings reports.
   - Per-vendor minimum cart value enforcement.
-
-- **Advanced Product Settings**:
-  - Product tagging system for better filtering and search.
 
 ## III. Security
 

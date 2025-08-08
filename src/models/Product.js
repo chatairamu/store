@@ -9,9 +9,9 @@ const Product = {
    * @param {number|null} categoryId - The ID of the category to filter by.
    * @returns {Promise<Array>} An array of product objects.
    */
-  async findAll(categoryId = null) {
+  async findAll(filters = {}) {
     let sql = `
-      SELECT
+      SELECT DISTINCT
         p.*,
         c.name as category_name,
         v.name as vendor_name
@@ -20,10 +20,21 @@ const Product = {
       JOIN vendors v ON p.vendor_id = v.id
     `;
     const params = [];
+    let whereClauses = [];
 
-    if (categoryId) {
-      sql += ' WHERE p.category_id = ?';
-      params.push(categoryId);
+    if (filters.tagId) {
+      sql += ' JOIN product_tags pt ON p.id = pt.product_id';
+      whereClauses.push('pt.tag_id = ?');
+      params.push(filters.tagId);
+    }
+
+    if (filters.categoryId) {
+      whereClauses.push('p.category_id = ?');
+      params.push(filters.categoryId);
+    }
+
+    if (whereClauses.length > 0) {
+      sql += ' WHERE ' + whereClauses.join(' AND ');
     }
 
     const [rows] = await pool.execute(sql, params);
@@ -145,6 +156,52 @@ const Product = {
     const sql = 'INSERT INTO product_images (product_id, image_path, is_featured) VALUES (?, ?, ?)';
     const [result] = await pool.execute(sql, [productId, imagePath, 1]);
     return result;
+  }
+};
+
+  /**
+   * Gets all tags associated with a specific product.
+   * @param {number} productId - The ID of the product.
+   * @returns {Promise<Array>} An array of tag objects.
+   */
+  async getTags(productId) {
+    const sql = `
+      SELECT t.id, t.name
+      FROM tags t
+      JOIN product_tags pt ON t.id = pt.tag_id
+      WHERE pt.product_id = ?
+    `;
+    const [rows] = await pool.execute(sql, [productId]);
+    return rows;
+  },
+
+  /**
+   * Updates the tags for a given product.
+   * @param {number} productId - The ID of the product.
+   * @param {Array<number>} tagIds - An array of tag IDs to associate with the product.
+   * @returns {Promise<void>}
+   */
+  async updateTags(productId, tagIds) {
+    const connection = await pool.getConnection();
+    await connection.beginTransaction();
+    try {
+      // First, remove all existing tags for this product
+      await connection.execute('DELETE FROM product_tags WHERE product_id = ?', [productId]);
+
+      // Then, insert the new tags if any are provided
+      if (tagIds && tagIds.length > 0) {
+        const values = tagIds.map(tagId => [productId, tagId]);
+        await connection.query('INSERT INTO product_tags (product_id, tag_id) VALUES ?', [values]);
+      }
+
+      await connection.commit();
+    } catch (error) {
+      await connection.rollback();
+      console.error('Update Tags Transaction Error:', error);
+      throw error;
+    } finally {
+      connection.release();
+    }
   }
 };
 

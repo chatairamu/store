@@ -65,5 +65,15 @@ router.get('/reviews', adminController.getReviewsPage);
 // @access  Admin
 router.post('/reviews/:reviewId/status', adminController.updateReviewStatus);
 
+// @route   GET /admin/tags
+// @desc    Get the tag management page
+// @access  Admin
+router.get('/tags', adminController.getTagsPage);
+
+// @route   POST /admin/tags
+// @desc    Create a new tag
+// @access  Admin
+router.post('/tags', adminController.createTag);
+
 
 module.exports = router;

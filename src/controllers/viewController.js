@@ -5,8 +5,19 @@ exports.getHomePage = (req, res) => {
   res.render('index', { title: 'Home' });
 };
 
-exports.getProductsPage = (req, res) => {
-  res.render('products', { title: 'Products' });
+const Tag = require('../models/Tag');
+
+exports.getProductsPage = async (req, res) => {
+    try {
+        const tags = await Tag.findAll();
+        res.render('products', {
+            title: 'Products',
+            tags: tags
+        });
+    } catch (error) {
+        console.error('Get Products Page Error:', error);
+        res.status(500).send('Server Error');
+    }
 };
 
 exports.getCartPage = (req, res) => {

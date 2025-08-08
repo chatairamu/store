@@ -35,6 +35,42 @@ exports.getDashboardPage = async (req, res) => {
 };
 
 /**
+ * Renders the tag management page.
+ * @route GET /admin/tags
+ */
+exports.getTagsPage = async (req, res) => {
+    try {
+        const Tag = require('../models/Tag');
+        const tags = await Tag.findAll();
+        res.render('admin/tags', {
+            title: 'Tag Management',
+            tags
+        });
+    } catch (error) {
+        console.error('Get Tags Page Error:', error);
+        res.status(500).send('Server Error');
+    }
+};
+
+/**
+ * Handles creating a new tag.
+ * @route POST /admin/tags
+ */
+exports.createTag = async (req, res) => {
+    try {
+        const { name } = req.body;
+        if (name) {
+            const Tag = require('../models/Tag');
+            await Tag.create(name);
+        }
+        res.redirect('/admin/tags');
+    } catch (error) {
+        console.error('Create Tag Error:', error);
+        res.status(500).send('Server Error');
+    }
+};
+
+/**
  * Renders the review moderation page.
  * @route GET /admin/reviews
  */
