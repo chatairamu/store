@@ -48,6 +48,9 @@ app.use('/api/coupons', couponRoutes);
 const reviewRoutes = require('./src/routes/reviewRoutes');
 app.use('/api/reviews', reviewRoutes);
 
+const wishlistRoutes = require('./src/routes/wishlistRoutes');
+app.use('/api/wishlist', wishlistRoutes);
+
 const paymentRoutes = require('./src/routes/paymentRoutes');
 app.use('/api/payments', paymentRoutes);
 

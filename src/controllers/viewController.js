@@ -33,6 +33,19 @@ exports.getRegisterPage = (req, res) => {
   res.render('register', { title: 'Register' });
 };
 
+exports.getWishlistPage = async (req, res) => {
+    try {
+        // The actual wishlist data will be fetched by client-side JS
+        res.render('wishlist', {
+            title: 'My Wishlist',
+            user: req.user
+        });
+    } catch (error) {
+        console.error('Get Wishlist Page Error:', error);
+        res.status(500).send('Server Error');
+    }
+};
+
 const Product = require('../models/Product');
 const Review = require('../models/Review');
 

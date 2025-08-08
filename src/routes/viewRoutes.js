@@ -26,6 +26,7 @@ router.get('/register', viewController.getRegisterPage);
 // The following routes require a user to be logged in.
 router.get('/account', protect, viewController.getAccountPage);
 router.get('/checkout', protect, viewController.getCheckoutPage);
+router.get('/wishlist', protect, viewController.getWishlistPage);
 
 
 module.exports = router;
