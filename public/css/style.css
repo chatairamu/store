@@ -1,0 +1,15 @@
+/* public/css/style.css */
+/* Custom styles for Orugallu Biryani platform */
+
+body {
+    padding-bottom: 60px; /* Add padding to the bottom of the body to account for the footer */
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px; /* Set the fixed height of the footer here */
+    line-height: 60px; /* Vertically center the text there */
+    background-color: #f5f5f5;
+}
