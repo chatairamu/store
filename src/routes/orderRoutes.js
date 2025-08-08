@@ -5,6 +5,7 @@ const express = require('express');
 const router = express.Router();
 const orderController = require('../controllers/orderController');
 const { protect } = require('../middleware/authMiddleware');
+const { validateToken } = require('../middleware/csrfMiddleware');
 
 // All routes in this file are protected.
 router.use(protect);
@@ -12,7 +13,7 @@ router.use(protect);
 // @route   POST /api/orders
 // @desc    Create a new order
 // @access  Protected
-router.post('/', orderController.createOrder);
+router.post('/', validateToken, orderController.createOrder);
 
 // @route   GET /api/orders
 // @desc    Get all orders for the logged-in user

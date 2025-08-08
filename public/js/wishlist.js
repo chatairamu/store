@@ -69,10 +69,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function addToWishlist(productId) {
     const token = localStorage.getItem('token');
+    const csrfToken = document.querySelector('input[name="_csrf"]')?.value || document.querySelector('[data-csrf-token]')?.dataset.csrfToken;
     try {
         const res = await fetch(`/api/wishlist/${productId}`, {
             method: 'POST',
-            headers: { 'Authorization': `Bearer ${token}` }
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'X-CSRF-Token': csrfToken
+            }
         });
         const data = await res.json();
         alert(data.message); // Simple feedback for now
@@ -83,10 +87,14 @@ async function addToWishlist(productId) {
 
 async function removeFromWishlist(productId) {
     const token = localStorage.getItem('token');
+    const csrfToken = document.querySelector('[data-csrf-token]').dataset.csrfToken;
     try {
         const res = await fetch(`/api/wishlist/${productId}`, {
             method: 'DELETE',
-            headers: { 'Authorization': `Bearer ${token}` }
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'X-CSRF-Token': csrfToken
+            }
         });
         const data = await res.json();
         // No alert on removal from wishlist page, as the item just disappears

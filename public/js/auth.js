@@ -15,10 +15,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const messageDiv = document.getElementById('login-message');
 
             try {
+                const csrfToken = document.querySelector('input[name="_csrf"]').value;
                 const res = await fetch('/api/auth/user/login', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': csrfToken
                     },
                     body: JSON.stringify({ email, password })
                 });
@@ -57,10 +59,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const messageDiv = document.getElementById('register-message');
 
             try {
+                const csrfToken = document.querySelector('input[name="_csrf"]').value;
                 const res = await fetch('/api/auth/user/register', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': csrfToken
                     },
                     body: JSON.stringify({ name, email, phone, password })
                 });

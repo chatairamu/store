@@ -61,9 +61,13 @@ document.addEventListener('DOMContentLoaded', () => {
     cartTableBody.addEventListener('click', async (e) => {
         if (e.target.classList.contains('remove-btn')) {
             const itemId = e.target.dataset.itemId;
+            const csrfToken = document.getElementById('cart-table').dataset.csrfToken;
             const res = await fetch(`/api/cart/${itemId}`, {
                 method: 'DELETE',
-                headers: { 'Authorization': `Bearer ${token}` }
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'X-CSRF-Token': csrfToken
+                }
             });
             const data = await res.json();
             renderCart(data.cart);
@@ -74,11 +78,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.classList.contains('quantity-input')) {
             const itemId = e.target.dataset.itemId;
             const quantity = e.target.value;
+            const csrfToken = document.getElementById('cart-table').dataset.csrfToken;
             const res = await fetch(`/api/cart/${itemId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`,
+                    'X-CSRF-Token': csrfToken
                 },
                 body: JSON.stringify({ quantity: parseInt(quantity) })
             });

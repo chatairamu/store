@@ -4,17 +4,18 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
+const { validateToken } = require('../middleware/csrfMiddleware');
 
 // --- User Authentication Routes ---
 // @route   POST /api/auth/user/register
 // @desc    Register a new user
 // @access  Public
-router.post('/user/register', authController.registerUser);
+router.post('/user/register', validateToken, authController.registerUser);
 
 // @route   POST /api/auth/user/login
 // @desc    Login a user and get a token
 // @access  Public
-router.post('/user/login', authController.loginUser);
+router.post('/user/login', validateToken, authController.loginUser);
 
 
 // --- Vendor Authentication Routes ---

@@ -23,11 +23,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
+                const csrfToken = document.querySelector('#review-form input[name="_csrf"]').value;
                 const res = await fetch(`/api/reviews/${productId}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
+                        'Authorization': `Bearer ${token}`,
+                        'X-CSRF-Token': csrfToken
                     },
                     body: JSON.stringify({ rating, comment })
                 });

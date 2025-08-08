@@ -4,6 +4,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 
 // Load environment variables from .env file
 dotenv.config();
@@ -15,6 +16,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // --- Middleware ---
+app.use(cookieParser());
+
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
 // Parse JSON bodies
@@ -61,10 +64,12 @@ app.use('/api/delivery', deliveryApiRoutes);
 const vendorRoutes = require('./src/routes/vendorRoutes');
 const deliveryPartnerRoutes = require('./src/routes/deliveryPartnerRoutes');
 const adminRoutes = require('./src/routes/adminRoutes');
+const { generateToken } = require('./src/middleware/csrfMiddleware');
+
 app.use('/vendor', vendorRoutes);
 app.use('/delivery', deliveryPartnerRoutes);
 app.use('/admin', adminRoutes);
-app.use('/', viewRoutes); // This should be last as a catch-all for pages
+app.use('/', generateToken, viewRoutes); // Generate CSRF token for all page views
 
 // --- Server Startup ---
 app.listen(PORT, () => {

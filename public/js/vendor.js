@@ -10,8 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (confirm(`Are you sure you want to delete product #${productId}? This action cannot be undone.`)) {
                 try {
+                    const csrfToken = document.querySelector('table').dataset.csrfToken;
                     const res = await fetch(`/vendor/products/${productId}`, {
                         method: 'DELETE',
+                        headers: {
+                            'X-CSRF-Token': csrfToken
+                        }
                     });
 
                     if (res.ok) {

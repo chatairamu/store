@@ -14,5 +14,4 @@ This document outlines the features from the original project description that h
 
 ## III. Security
 
-- **CSRF Protection**:
-  - Implementation of CSRF tokens, especially for forms submitted from the views, to prevent cross-site request forgery.
+(All major security features from the initial list are now implemented or have foundational support.)

@@ -14,7 +14,7 @@
         <h1>My Wishlist</h1>
         <p>Your saved items for later.</p>
 
-        <div id="wishlist-items" class="row">
+        <div id="wishlist-items" class="row" data-csrf-token="<%= csrfToken %>">
             <!-- Wishlist items will be dynamically inserted here by wishlist.js -->
             <p>Loading your wishlist...</p>
         </div>

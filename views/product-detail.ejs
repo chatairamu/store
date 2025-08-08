@@ -44,6 +44,7 @@
             <h3>Leave a Review</h3>
             <% if (user) { %>
                 <form id="review-form">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <div class="mb-3">
                         <label for="rating" class="form-label">Your Rating</label>
                         <select class="form-select" id="rating" name="rating" required>

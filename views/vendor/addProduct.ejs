@@ -5,6 +5,7 @@
 <p class="lead">Fill out the form below to add a new product to your store.</p>
 
 <form action="/vendor/products" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
     <div class="mb-3">
         <label for="name" class="form-label">Product Name</label>
         <input type="text" class="form-control" id="name" name="name" required>

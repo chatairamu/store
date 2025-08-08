@@ -35,9 +35,11 @@
                     <td>
                         <% if (vendor.status === 'pending') { %>
                             <form action="/admin/vendors/<%= vendor.id %>/status" method="POST" class="d-inline">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                 <button type="submit" name="status" value="approved" class="btn btn-sm btn-success">Approve</button>
                             </form>
                             <form action="/admin/vendors/<%= vendor.id %>/status" method="POST" class="d-inline">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                 <button type="submit" name="status" value="rejected" class="btn btn-sm btn-danger">Reject</button>
                             </form>
                         <% } else { %>

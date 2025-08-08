@@ -5,6 +5,7 @@
 <p class="lead">Configure how delivery partner earnings are calculated.</p>
 
 <form action="/admin/settings/delivery" method="POST">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
     <div class="card">
         <div class="card-header">Base Calculation</div>
         <div class="card-body">

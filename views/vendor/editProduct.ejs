@@ -5,6 +5,7 @@
 <p class="lead">Update the details for your product below.</p>
 
 <form action="/vendor/products/edit/<%= product.id %>" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
     <div class="mb-3">
         <label for="name" class="form-label">Product Name</label>
         <input type="text" class="form-control" id="name" name="name" value="<%= product.name %>" required>

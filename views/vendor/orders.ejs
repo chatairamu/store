@@ -28,6 +28,7 @@
                     </td>
                     <td>
                         <form action="/vendor/orders/<%= order.id %>/status" method="POST" class="d-flex">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             <select name="status" class="form-select form-select-sm me-2">
                                 <option value="Pending" <%= order.order_status === 'Pending' ? 'selected' : '' %>>Pending</option>
                                 <option value="Confirmed" <%= order.order_status === 'Confirmed' ? 'selected' : '' %>>Confirmed</option>
