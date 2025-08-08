@@ -209,4 +209,21 @@ const Order = {
   }
 };
 
+  /**
+   * Finds all orders on the platform.
+   * @returns {Promise<Array>} An array of order objects.
+   */
+  async findAll() {
+    const sql = `
+      SELECT o.*, u.name as user_name, v.name as vendor_name
+      FROM orders o
+      JOIN users u ON o.user_id = u.id
+      JOIN vendors v ON o.vendor_id = v.id
+      ORDER BY o.created_at DESC
+    `;
+    const [rows] = await pool.execute(sql);
+    return rows;
+  }
+};
+
 module.exports = Order;

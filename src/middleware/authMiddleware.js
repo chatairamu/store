@@ -95,4 +95,16 @@ const isDeliveryPartner = (req, res, next) => {
   }
 };
 
-module.exports = { protect, admin, isVendor, isDeliveryPartner };
+/**
+ * Middleware to ensure the logged-in user is an admin.
+ * Should be used after the 'protect' middleware.
+ */
+const isAdmin = (req, res, next) => {
+  if (req.user && req.user.is_admin) {
+    next();
+  } else {
+    res.status(403).json({ message: 'Access denied. Administrator authorization required.' });
+  }
+};
+
+module.exports = { protect, admin, isVendor, isDeliveryPartner, isAdmin };

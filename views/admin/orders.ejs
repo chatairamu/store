@@ -1,0 +1,23 @@
+<%- include('partials/header') %>
+<%- include('partials/sidebar') %>
+
+<h1 class="mt-4">Order Management</h1>
+<p class="lead">A list of all orders placed on the platform.</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Order ID</th>
+            <th scope="col">Date</th>
+            <th scope="col">User</th>
+            <th scope="col">Vendor</th>
+            <th scope="col">Total</th>
+            <th scope="col">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Order rows will be dynamically inserted here -->
+    </tbody>
+</table>
+
+<%- include('partials/footer') %>

@@ -40,7 +40,7 @@ const User = {
    * @returns {Promise<object|null>} The user object if found, otherwise null.
    */
   async findById(id) {
-    const sql = 'SELECT id, name, email, phone, created_at FROM users WHERE id = ?';
+    const sql = 'SELECT id, name, email, phone, is_admin, created_at FROM users WHERE id = ?';
     const [rows] = await pool.execute(sql, [id]);
     return rows[0] || null;
   },
@@ -53,6 +53,17 @@ const User = {
    */
   async comparePasswords(candidatePassword, hashedPassword) {
     return await bcrypt.compare(candidatePassword, hashedPassword);
+  }
+};
+
+  /**
+   * Finds all users.
+   * @returns {Promise<Array>} An array of user objects.
+   */
+  async findAll() {
+    const sql = 'SELECT id, name, email, phone, is_admin, created_at FROM users ORDER BY created_at DESC';
+    const [rows] = await pool.execute(sql);
+    return rows;
   }
 };
 

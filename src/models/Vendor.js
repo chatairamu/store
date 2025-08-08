@@ -66,4 +66,33 @@ const Vendor = {
   }
 };
 
+  /**
+   * Finds all vendors.
+   * @returns {Promise<Array>} An array of vendor objects.
+   */
+  async findAll() {
+    const sql = 'SELECT id, name, owner_name, email, phone, status, created_at FROM vendors ORDER BY created_at DESC';
+    const [rows] = await pool.execute(sql);
+    return rows;
+  }
+};
+
+  /**
+   * Updates the status of a vendor (e.g., for admin approval).
+   * @param {number} vendorId - The ID of the vendor to update.
+   * @param {string} newStatus - The new status ('approved', 'rejected').
+   * @returns {Promise<object>} The result of the update operation.
+   */
+  async updateStatus(vendorId, newStatus) {
+    const allowedStatuses = ['pending', 'approved', 'rejected'];
+    if (!allowedStatuses.includes(newStatus)) {
+      throw new Error('Invalid vendor status.');
+    }
+
+    const sql = 'UPDATE vendors SET status = ? WHERE id = ?';
+    const [result] = await pool.execute(sql, [newStatus, vendorId]);
+    return result;
+  }
+};
+
 module.exports = Vendor;

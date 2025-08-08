@@ -1,0 +1,57 @@
+<%- include('partials/header') %>
+<%- include('partials/sidebar') %>
+
+<h1 class="mt-4">Vendor Management</h1>
+<p class="lead">A list of all registered vendors. Approve or reject new applications here.</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Owner</th>
+            <th scope="col">Email</th>
+            <th scope="col">Status</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if (vendors.length > 0) { %>
+            <% vendors.forEach(vendor => { %>
+                <tr>
+                    <th scope="row"><%= vendor.id %></th>
+                    <td><%= vendor.name %></td>
+                    <td><%= vendor.owner_name %></td>
+                    <td><%= vendor.email %></td>
+                    <td>
+                        <% if (vendor.status === 'approved') { %>
+                            <span class="badge bg-success">Approved</span>
+                        <% } else if (vendor.status === 'rejected') { %>
+                            <span class="badge bg-danger">Rejected</span>
+                        <% } else { %>
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        <% } %>
+                    </td>
+                    <td>
+                        <% if (vendor.status === 'pending') { %>
+                            <form action="/admin/vendors/<%= vendor.id %>/status" method="POST" class="d-inline">
+                                <button type="submit" name="status" value="approved" class="btn btn-sm btn-success">Approve</button>
+                            </form>
+                            <form action="/admin/vendors/<%= vendor.id %>/status" method="POST" class="d-inline">
+                                <button type="submit" name="status" value="rejected" class="btn btn-sm btn-danger">Reject</button>
+                            </form>
+                        <% } else { %>
+                            <span>No actions available</span>
+                        <% } %>
+                    </td>
+                </tr>
+            <% }); %>
+        <% } else { %>
+            <tr>
+                <td colspan="6" class="text-center">There are no vendors to display.</td>
+            </tr>
+        <% } %>
+    </tbody>
+</table>
+
+<%- include('partials/footer') %>
